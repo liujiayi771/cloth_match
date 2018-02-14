@@ -1,17 +1,9 @@
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 import datetime
-from data_structure import dim_item
+import data_utils
 from pyspark import SparkConf, SparkContext
-
-
-def initialize_from_input_line(line):
-    tokens = line.split()
-    if len(tokens) == 3:
-        return dim_item(tokens[0], tokens[1], tokens[2])
-    else:
-        print("\nerror line: " + line)
-        return None
 
 
 def calculate_tf_idf(group):
@@ -30,12 +22,13 @@ def calculate_tf_idf(group):
                 cat_dict[term].add(item)
 
     for item in group_items:
-        item.cat_calculate_tf_idf(group_items, cat_dict)
+        data_utils.cat_calculate_tf_idf(item, group_items, cat_dict)
+
         with open("dim_item_tf_idf.txt", 'a+') as f:
             format_str = item.item_id + ' ' + item.cat_id + ' ' + ",".join(item.terms) + ' ' + ",".join(
                 map(lambda x: str(x), item.tf_idf)) + "\n"
             f.write(format_str)
-            f.close()
+
     return group_items
 
 
@@ -43,11 +36,13 @@ if __name__ == "__main__":
     conf = SparkConf().setMaster("local[5]")
     sc = SparkContext(appName="cloth_matches", conf=conf)
     sc.addPyFile("file:///home/joey/Documents/projects/PycharmProjects/cloth_match/data_structure.py")
+
     file_name = "file:///home/joey/Documents/data/tianchi_dapei/Taobao_Clothes_Matching_Data/dim_items.txt"
+
     start = datetime.datetime.now()
 
     lines = sc.textFile(file_name, minPartitions=30)
-    lines.map(initialize_from_input_line) \
+    lines.map(data_utils.init_dim_item_from_input_line) \
         .filter(lambda x: x is not None) \
         .groupBy(lambda x: x.cat_id) \
         .flatMap(calculate_tf_idf) \
