@@ -26,7 +26,9 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
             res = 0
             for x in item_match[internal_item.item_id]:
                 if item_sets.get(x) is not None:
-                    res += math.pow(data_utils.calculate_similarity(item_sets.get(x), sample_item) / map_function(n_item), p)
+                    numerator = data_utils.calculate_similarity(item_sets.get(x), sample_item)
+                    denominator = map_function(len(item_sets.get(x).terms))
+                    res += math.pow(numerator / denominator, p)
             result_dict[internal_item.item_id] = map_function(n_item) * math.pow(res, 1 / p)
 
     result = sorted(result_dict.items(), key=lambda x: x[1], reverse=True)
@@ -41,7 +43,7 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
 
 if __name__ == "__main__":
     base_dir = "/home/joey/Documents/data/tianchi_dapei/Taobao_Clothes_Matching_Data/4000_sample"
-    sample_file = base_dir + "/sample_dim_item_tf_idf.txt"
+    sample_file = base_dir + "/test.txt"
     match_file = base_dir + "/train_dim_fashion_matchsets.txt"
     item_file = base_dir + "/train_dim_item_tf_idf.txt"
     item_match_file = base_dir + "/train_item_match.txt"
