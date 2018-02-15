@@ -19,7 +19,7 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
     result_dict = {}
     item_count = 1
     for internal_item in item_sets.values():
-        print("\r", "item_count: " + str(item_count), end="")
+        # print("\r", "item_count: " + str(item_count), end="")
         item_count += 1
         if item_match.get(internal_item.item_id) is not None:
             n_item = len(internal_item.terms)
@@ -29,8 +29,8 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
                     res += math.pow(data_utils.calculate_similarity(item_sets.get(x), sample_item) / map_function(n_item), p)
             result_dict[internal_item.item_id] = map_function(n_item) * math.pow(res, 1 / p)
 
-    print("\nresult_dict_size: " + str(len(result_dict)))
     result = sorted(result_dict.items(), key=lambda x: x[1], reverse=True)
+    print(result[:10])
     if len(result) > 200:
         result = result[:200]
 
@@ -44,11 +44,14 @@ if __name__ == "__main__":
     sample_file = base_dir + "/sample_dim_item_tf_idf.txt"
     match_file = base_dir + "/train_dim_fashion_matchsets.txt"
     item_file = base_dir + "/train_dim_item_tf_idf.txt"
+    item_match_file = base_dir + "/train_item_match.txt"
 
     sample_list = data_utils.init_dim_items_from_filename(sample_file, with_tf_idf=True)
     match_list = data_utils.init_dim_fashion_match_sets_from_filename(match_file)
     item_dict = data_utils.init_item_dict_from_filename(item_file, with_tf_idf=True)
+    item_match_dict = data_utils.init_item_match_dict_from_filename(item_match_file)
 
+    """
     item_match_sets = {}
     count = 1
     start = datetime.datetime.now()
@@ -58,10 +61,16 @@ if __name__ == "__main__":
         for match in match_list:
             if match.find_item(item):
                 match_item = match.get_match_item(item)
-                item_match_sets[item.item_id] = match_list
-                with open("train_item_match.txt", 'a+') as f:
-                    f.write(item.item_id + ' ' + ",".join(match_item) + '\n')
+                if item_match_sets.get(item.item_id) is None:
+                    item_match_sets[item.item_id] = match_item
+                else:
+                    item_match_sets[item.item_id] += match_item
+        with open("train_item_match.txt", 'a+') as f:
+            if item_match_sets.get(item.item_id) is not None:
+                f.write(item.item_id + ' ' + ",".join(item_match_sets[item.item_id]) + '\n')
     end = datetime.datetime.now()
     print("\nmap building time: " + str(end - start))
-    # for sample in sample_list:
-    #     calculate_collocation_degree(sample, item_match_sets, item_dict)
+    """
+
+    for sample in sample_list:
+        calculate_collocation_degree(sample, item_match_dict, item_dict)

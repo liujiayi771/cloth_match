@@ -15,7 +15,7 @@ def calculate_tf_idf(group):
     cat_dict = {}
     for item in group_items:
         for term in item.terms:
-            if term not in cat_dict.keys():
+            if cat_dict.get(term) is None:
                 cat_dict[term] = set()
                 cat_dict[term].add(item)
             else:

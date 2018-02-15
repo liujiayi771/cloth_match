@@ -42,6 +42,17 @@ def init_item_dict_from_filename(filename, with_tf_idf=False):
     return items_dict
 
 
+def init_item_match_dict_from_filename(filename):
+    item_match_dict = {}
+    with open(filename) as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            tokens = line.split()
+            if len(tokens) == 2:
+                item_match_dict[tokens[0]] = tokens[1].split(',')
+    return item_match_dict
+
+
 def init_dim_fashion_match_sets_from_filename(filename):
     match_sets = []
     with open(filename) as f:
