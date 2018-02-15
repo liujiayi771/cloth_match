@@ -41,6 +41,26 @@ def init_item_dict_from_filename(filename, with_tf_idf=False):
                 items_dict[tokens[0]] = dim_item(tokens[0], tokens[1], tokens[2], tokens[3])
     return items_dict
 
+def init_history_dict_from_filename(filename):
+	history_dict = {}
+	with open(filename) as f:
+		for line in f.readlines():
+			line = line.strip('\n')
+			tokens = line.split()
+			key = tokens[0] + tokens[2]
+			if(len(tokens) ==3):
+				if not history_dict.has_key(key):
+					history_dict[key] = []
+				history_dict[key].append(tokens[1])
+	return history_dict
+
+def init_item_id_from_filename(filename):
+    sample_item_list = []
+    with open(filename) as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            sample_item_list.append(line)
+    return sample_item_list
 
 def init_item_match_dict_from_filename(filename):
     item_match_dict = {}
