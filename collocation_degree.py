@@ -46,7 +46,7 @@ if __name__ == "__main__":
     item_file = base_dir + "/train_dim_item_tf_idf.txt"
 
     sample_list = data_utils.init_dim_items_from_filename(sample_file, with_tf_idf=True)
-    match_list = data_utils.init_dim_items_from_filename(match_file, with_tf_idf=True)
+    match_list = data_utils.init_dim_fashion_match_sets_from_filename(match_file)
     item_dict = data_utils.init_item_dict_from_filename(item_file, with_tf_idf=True)
 
     item_match_sets = {}
@@ -59,7 +59,9 @@ if __name__ == "__main__":
             if match.find_item(item):
                 match_item = match.get_match_item(item)
                 item_match_sets[item.item_id] = match_list
+                with open("train_item_match.txt", 'a+') as f:
+                    f.write(item.item_id + ' ' + ",".join(match_item) + '\n')
     end = datetime.datetime.now()
     print("\nmap building time: " + str(end - start))
-    for sample in sample_list:
-        calculate_collocation_degree(sample, item_match_sets, item_dict)
+    # for sample in sample_list:
+    #     calculate_collocation_degree(sample, item_match_sets, item_dict)

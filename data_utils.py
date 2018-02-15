@@ -2,7 +2,7 @@ from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
 import math
-from data_structure import dim_item
+from data_structure import dim_item, dim_fashion_match_sets
 
 
 def init_dim_item_from_input_line(line, with_tf_idf=False):
@@ -40,6 +40,17 @@ def init_item_dict_from_filename(filename, with_tf_idf=False):
             if with_tf_idf and len(tokens) == 4:
                 items_dict[tokens[0]] = dim_item(tokens[0], tokens[1], tokens[2], tokens[3])
     return items_dict
+
+
+def init_dim_fashion_match_sets_from_filename(filename):
+    match_sets = []
+    with open(filename) as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            tokens = line.split()
+            if len(tokens) == 2:
+                match_sets.append(dim_fashion_match_sets(tokens[0], tokens[1]))
+    return match_sets
 
 
 def calculate_tf_idf(single_item, items):
