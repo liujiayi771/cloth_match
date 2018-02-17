@@ -2,7 +2,7 @@ from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
 import math
-from data_structure import dim_item, dim_fashion_match_sets
+from data_structure import dim_item, dim_fashion_match_sets, user_bought_history
 
 
 def init_dim_item_from_input_line(line, with_tf_idf=False):
@@ -11,6 +11,15 @@ def init_dim_item_from_input_line(line, with_tf_idf=False):
         return dim_item(tokens[0], tokens[1], tokens[2])
     elif with_tf_idf and len(tokens) == 4:
         return dim_item(tokens[0], tokens[1], tokens[2], tokens[3])
+    else:
+        print("\nerror line: " + line)
+        return None
+
+
+def init_user_bought_history_from_input_line(line):
+    tokens = line.split()
+    if len(tokens) == 3:
+        return user_bought_history(tokens[0], tokens[1], tokens[2])
     else:
         print("\nerror line: " + line)
         return None
@@ -41,18 +50,29 @@ def init_item_dict_from_filename(filename, with_tf_idf=False):
                 items_dict[tokens[0]] = dim_item(tokens[0], tokens[1], tokens[2], tokens[3])
     return items_dict
 
+
 def init_history_dict_from_filename(filename):
-	history_dict = {}
-	with open(filename) as f:
-		for line in f.readlines():
-			line = line.strip('\n')
-			tokens = line.split()
-			key = tokens[0] + tokens[2]
-			if(len(tokens) ==3):
-				if not history_dict.has_key(key):
-					history_dict[key] = []
-				history_dict[key].append(tokens[1])
-	return history_dict
+    # history_dict = {}
+    # with open(filename) as f:
+    #     for line in f.readlines():
+    #         line = line.strip('\n')
+    #         tokens = line.split()
+    #         key = tokens[0] + tokens[2]
+    #         if len(tokens) == 3:
+    #             if history_dict.get(key) is None:
+    #                 history_dict[key] = []
+    #             history_dict[key].append(tokens[1])
+    # return history_dict
+    history_dict = []
+    with open(filename) as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            tokens = line.split()
+            key = tokens[0] + tokens[2]
+            if len(tokens) == 3:
+                history_dict.append(user_bought_history(tokens[0], tokens[1], tokens[2]))
+    return history_dict
+
 
 def init_item_id_from_filename(filename):
     sample_item_list = []
@@ -61,6 +81,7 @@ def init_item_id_from_filename(filename):
             line = line.strip('\n')
             sample_item_list.append(line)
     return sample_item_list
+
 
 def init_item_match_dict_from_filename(filename):
     item_match_dict = {}
@@ -113,4 +134,3 @@ def calculate_similarity(a_item, b_item):
     for same in intersection:
         res += float(a_item.tf_idf[a_item.terms.index(same)]) * float(b_item.tf_idf[b_item.terms.index(same)])
     return res
-

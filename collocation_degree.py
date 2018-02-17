@@ -15,11 +15,11 @@ def map_function(n):
 
 
 def calculate_collocation_degree(sample_item, item_match, item_sets):
-    print("\nstart predix item: " + sample_item.item_id)
+    # print("\nstart predix item: " + sample_item.item_id)
     result_dict = {}
     item_count = 1
     for internal_item in item_sets.values():
-        # print("\r", "item_count: " + str(item_count), end="")
+        print("\r", "item_count: " + str(item_count), end="")
         item_count += 1
         if item_match.get(internal_item.item_id) is not None:
             n_item = len(internal_item.terms)
@@ -42,11 +42,11 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
 
 
 if __name__ == "__main__":
-    base_dir = "/home/joey/Documents/data/tianchi_dapei/Taobao_Clothes_Matching_Data/4000_sample"
-    sample_file = base_dir + "/test.txt"
-    match_file = base_dir + "/train_dim_fashion_matchsets.txt"
-    item_file = base_dir + "/train_dim_item_tf_idf.txt"
-    item_match_file = base_dir + "/train_item_match.txt"
+    base_dir = "/home/joey/Documents/data/tianchi_dapei/Taobao_Clothes_Matching_Data"
+    sample_file = base_dir + "/test_sample/test_dim_item_tf_idf.txt"
+    match_file = base_dir + "/dim_fashion_matchsets.txt"
+    item_file = base_dir + "/dim_item_tf_idf.txt"
+    item_match_file = base_dir + "/test_sample/item_match_dict.txt"
 
     sample_list = data_utils.init_dim_items_from_filename(sample_file, with_tf_idf=True)
     match_list = data_utils.init_dim_fashion_match_sets_from_filename(match_file)
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                     item_match_sets[item.item_id] = match_item
                 else:
                     item_match_sets[item.item_id] += match_item
-        with open("train_item_match.txt", 'a+') as f:
+        with open("item_match_dict.txt", 'a+') as f:
             if item_match_sets.get(item.item_id) is not None:
                 f.write(item.item_id + ' ' + ",".join(item_match_sets[item.item_id]) + '\n')
     end = datetime.datetime.now()

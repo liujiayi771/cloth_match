@@ -43,3 +43,12 @@ class dim_fashion_match_sets(object):
                 if item.item_id not in x:
                     match_item += x.split(',')
         return match_item
+
+
+class user_bought_history(object):
+    """class for user bought history"""
+
+    def __init__(self, user_id, item_id, create_at):
+        self.key = user_id + create_at
+        self.item_id = item_id
+
