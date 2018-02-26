@@ -38,6 +38,15 @@ def init_dim_items_from_filename(filename, with_tf_idf=False):
     return items
 
 
+def init_test_sample_from_filename(filename):
+    items = []
+    with open(filename) as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            items.append(line)
+    return items
+
+
 def init_item_dict_from_filename(filename, with_tf_idf=False):
     items_dict = {}
     with open(filename) as f:

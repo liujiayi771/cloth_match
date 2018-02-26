@@ -2,7 +2,7 @@ import csv
 
 output = []
 
-with open('fm_submissions.txt') as f:
+with open('predict_history.txt') as f:
     for line in f.readlines():
         line = line.strip('\n')
         tokens = line.split()

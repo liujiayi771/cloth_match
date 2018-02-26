@@ -42,11 +42,11 @@ def calculate_collocation_degree(sample_item, item_match, item_sets):
 
 
 if __name__ == "__main__":
-    base_dir = "/home/joey/Documents/data/tianchi_dapei/Taobao_Clothes_Matching_Data"
-    sample_file = base_dir + "/test_sample/test_dim_item_tf_idf.txt"
-    match_file = base_dir + "/dim_fashion_matchsets.txt"
-    item_file = base_dir + "/dim_item_tf_idf.txt"
-    item_match_file = base_dir + "/test_sample/item_match_dict.txt"
+    base_dir = "E:\\Project\\PycharmProjects\\cloth_match\\data"
+    sample_file = base_dir + "\\test_sample\\test_dim_item_tf_idf.txt"
+    match_file = base_dir + "\\dim_fashion_matchsets.txt"
+    item_file = base_dir + "\\dim_item_tf_idf.txt"
+    item_match_file = base_dir + "\\test_sample\\item_match_dict.txt"
 
     sample_list = data_utils.init_dim_items_from_filename(sample_file, with_tf_idf=True)
     match_list = data_utils.init_dim_fashion_match_sets_from_filename(match_file)
